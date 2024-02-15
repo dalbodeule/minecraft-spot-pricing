@@ -708,7 +708,9 @@ Resources:
           import boto3
           import os
           def handler(event, context):
-            new_instance = boto3.resource('ec2').Instance(event['detail']['EC2InstanceId'])
+            record_name = os.environ['RecordName']
+            instance_id = event['detail']['EC2InstanceId']
+            new_instance = boto3.resource('ec2').Instance(instance_id)
             boto3.client('route53').change_resource_record_sets(
               HostedZoneId= os.environ['HostedZoneId'],
               ChangeBatch={
@@ -717,7 +719,7 @@ Resources:
                       {
                           'Action': 'UPSERT',
                           'ResourceRecordSet': {
-                              'Name': f'_minecraft._tcp.{os.environ['RecordName']}',
+                              'Name': f"_minecraft._tcp.{record_name}",
                               'Type': 'SRV',
                               'TTL': 60,
                               'ResourceRecords': [
