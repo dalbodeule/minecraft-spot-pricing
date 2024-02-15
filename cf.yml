@@ -717,12 +717,12 @@ Resources:
                       {
                           'Action': 'UPSERT',
                           'ResourceRecordSet': {
-                              'Name': os.environ['RecordName'],
-                              'Type': 'A',
+                              'Name': f'_minecraft._tcp.{os.environ['RecordName']}',
+                              'Type': 'SRV',
                               'TTL': 60,
                               'ResourceRecords': [
                                   {
-                                      'Value': new_instance.public_ip_address
+                                      'Value': f'0 1 25565 {new_instance.public_dns_name}'
                                   },
                               ]
                           }
